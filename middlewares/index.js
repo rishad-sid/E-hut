@@ -10,7 +10,7 @@ module.exports = (app) => {
     app.use(cors());
     app.use(compression());
 
-    if (process.env.NODE_ENV === "development") {
-        app.use(morgan("dev"));
+    if (process.env.NODE_ENV === "production") {
+        app.use(morgan("pro"));
     }
 }
