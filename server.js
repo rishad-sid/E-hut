@@ -1,23 +1,17 @@
-const dotenv = require("dotenv");
-require("dotenv/config");
-const mongoose = require("mongoose");
-const app = require("./app");
-
-
-
+require('dotenv/config');
+const app = require('./app');
+const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGODB_URL_LOCAL, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
 })
-.then(()=>console.log("Connected to mongoDB"))
-.catch(err=>console.error("Connection failed"));
+    .then(() => console.log("Connected to MongoDB!"))
+    .catch(err => console.error("MongoDB Connection Failed!"));
 
 const port = process.env.PORT || 3001;
 
-//mongodb://localhost:27017/ecommerce
-
-app.listen(port, ()=> {
-    console.log(`Server started at ${port}`);
-});
+app.listen(port, () => {
+    console.log(`App running on port ${port}!`);
+})
