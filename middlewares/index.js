@@ -1,8 +1,7 @@
-const express = require("express");
-const compression = require("compression");
-const cors = require("cors");
-const morgan = require("morgan");
-
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const compression = require('compression');
 
 module.exports = (app) => {
     app.use(express.json());
@@ -10,7 +9,7 @@ module.exports = (app) => {
     app.use(cors());
     app.use(compression());
 
-    if (process.env.NODE_ENV === "production") {
-        app.use(morgan("pro"));
+    if (process.env.NODE_ENV === 'development') {
+        app.use(morgan('dev'));
     }
 }

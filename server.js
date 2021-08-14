@@ -2,7 +2,7 @@ require('dotenv/config');
 const app = require('./app');
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URL_LOCAL, {
+mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
