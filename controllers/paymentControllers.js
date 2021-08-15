@@ -39,10 +39,10 @@ module.exports.initPayment = async (req, res) => {
 
     // Set the urls
     payment.setUrls({
-        success: 'https://secret-stream-23319.herokuapp.com/api/payment/success', // If payment Succeed
-        fail: 'yoursite.com/fail', // If payment failed
-        cancel: 'yoursite.com/cancel', // If user cancel payment
-        ipn: 'https://secret-stream-23319.herokuapp.com/api/payment/ipn' // SSLCommerz will send http post request in this link
+        success: 'https://e-hut.herokuapp.com/api/payment/success', // If payment Succeed
+        fail: 'https://e-hut.herokuapp.com/api/payment/fail', // If payment failed
+        cancel: 'https://e-hut.herokuapp.com/api/payment/cancel', // If user cancel payment
+        ipn: 'https://e-hut.herokuapp.com/api/payment/ipn' // SSLCommerz will send http post request in this link
     });
 
     // Set order details
@@ -82,7 +82,7 @@ module.exports.initPayment = async (req, res) => {
 
     // Set Product Profile
     payment.setProductInfo({
-        product_name: 'Bohubrihi E-com Products',
+        product_name: 'E-hut Products',
         product_category: 'General',
         product_profile: 'general'
     });
