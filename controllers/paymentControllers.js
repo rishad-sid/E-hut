@@ -3,6 +3,7 @@ const { Profile } = require('../models/profile');
 const PaymentSession = require('ssl-commerz-node').PaymentSession;
 const { Order } = require("../models/order");
 const { Payment } = require("../models/payment");
+const path = require("path");
 
 module.exports.ipn = async (req, res) => {
     const payment = new Payment(req.body);
@@ -36,9 +37,9 @@ module.exports.initPayment = async (req, res) => {
 
     // Set the urls
     payment.setUrls({
-        success: 'yoursite.com/success', // If payment Succeed
-        fail: 'yoursite.com/fail', // If payment failed
-        cancel: 'yoursite.com/cancel', // If user cancel payment
+        success: 'https://e-hut.herokuapp.com/api/payment/success', // If payment Succeed
+        fail: 'https://e-hut.herokuapp.com/api/payment/fail', // If payment failed
+        cancel: 'https://e-hut.herokuapp.com/api/payment/cancel', // If user cancel payment
         ipn: 'https://e-hut.herokuapp.com/api/payment/ipn' // SSLCommerz will send http post request in this link
     });
 
@@ -94,4 +95,8 @@ module.exports.initPayment = async (req, res) => {
         await order.save();
     }
     return res.status(200).send(response);
+}
+
+module.exports.paymentSuccess = async (req, res) => {
+    res.sendFile(path.join(__basedir + "public/success.html"));
 }
