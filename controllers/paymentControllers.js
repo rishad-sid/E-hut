@@ -1,21 +1,23 @@
 const { CartItem } = require('../models/cartItem');
 const { Profile } = require('../models/profile');
 const PaymentSession = require('ssl-commerz-node').PaymentSession;
-const { Order } = require("../models/order");
-const { Payment } = require("../models/payment");
-const path = require("path");
+const { Order } = require('../models/order');
+const { Payment } = require('../models/payment');
+const path = require('path');
+
 
 module.exports.ipn = async (req, res) => {
     const payment = new Payment(req.body);
-    const tran_id = payment["tran_id"];
-    if(payment["status"] === "VALID") {
-        const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Complete" });
+    const tran_id = payment['tran_id'];
+    if (payment['status'] === 'VALID') {
+        const order = await Order.updateOne({ transaction_id: tran_id }, { status: 'Complete' });
         await CartItem.deleteMany(order.cartItems);
     } else {
         await Order.deleteOne({ transaction_id: tran_id });
     }
     await payment.save();
     return res.status(200).send("IPN");
+
 }
 
 module.exports.initPayment = async (req, res) => {
@@ -37,10 +39,10 @@ module.exports.initPayment = async (req, res) => {
 
     // Set the urls
     payment.setUrls({
-        success: 'https://e-hut.herokuapp.com/api/payment/success', // If payment Succeed
-        fail: 'https://e-hut.herokuapp.com/api/payment/fail', // If payment failed
-        cancel: 'https://e-hut.herokuapp.com/api/payment/cancel', // If user cancel payment
-        ipn: 'https://e-hut.herokuapp.com/api/payment/ipn' // SSLCommerz will send http post request in this link
+        success: 'https://secret-stream-23319.herokuapp.com/api/payment/success', // If payment Succeed
+        fail: 'yoursite.com/fail', // If payment failed
+        cancel: 'yoursite.com/cancel', // If user cancel payment
+        ipn: 'https://secret-stream-23319.herokuapp.com/api/payment/ipn' // SSLCommerz will send http post request in this link
     });
 
     // Set order details
@@ -80,23 +82,20 @@ module.exports.initPayment = async (req, res) => {
 
     // Set Product Profile
     payment.setProductInfo({
-        product_name: 'E-hut Products',
+        product_name: 'Bohubrihi E-com Products',
         product_category: 'General',
         product_profile: 'general'
     });
 
     response = await payment.paymentInit();
-    let order = new Order({
-        cartItems: cartItems, user: userId,
-        transaction_id: tran_id, address: profile
-    });
-    if (response.status === "SUCCESS") {
-        order.sessionKey = response["sessionkey"];
+    const order = new Order({ cartItems: cartItems, user: userId, transaction_id: tran_id, address: profile });
+    if (response.status === 'SUCCESS') {
+        order.sessionKey = response['sessionkey'];
         await order.save();
     }
     return res.status(200).send(response);
 }
 
 module.exports.paymentSuccess = async (req, res) => {
-    res.sendFile(path.join(__basedir + "public/success.html"));
+    res.sendFile(path.join(__basedir + "/public/success.html"))
 }
